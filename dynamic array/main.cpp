@@ -6,7 +6,7 @@ class dynamicArray
 private:
 	T* buffer;
 	size_t currSize;
-	size_t capacity;
+	size_t currCapacity;
 
 	void realloc(size_t _newCapacity)
 	{
@@ -20,13 +20,13 @@ private:
 		delete[] buffer;
 		buffer = temporary;
 
-		capacity = _newCapacity;
+		currCapacity = _newCapacity;
 	}
 
 public:
-	dynamicArray(size_t _capacity = 1) noexcept : capacity(_capacity), currSize(0)
+	dynamicArray(size_t _capacity = 1) noexcept : currCapacity(_capacity), currSize(0)
 	{
-		buffer = new T[capacity];
+		buffer = new T[currCapacity];
 	}
 
 	~dynamicArray()
@@ -36,8 +36,8 @@ public:
 
 	void push_back(T _element)
 	{
-		if (currSize >= capacity)
-			realloc(2 * capacity);
+		if (currSize >= currCapacity)
+			realloc(2 * currCapacity);
 
 		buffer[currSize] = _element;
 
@@ -54,8 +54,8 @@ public:
 
 		currSize--;
 
-		if (currSize <= capacity / 2)
-			realloc(capacity / 2);
+		if (currSize <= currCapacity / 2)
+			realloc(currCapacity / 2);
 	}
 
 	void pop_back()
@@ -64,12 +64,48 @@ public:
 			erase(begin() + currSize - 1);
 	}
 
-	T* begin() const noexcept
+	void shrink_to_fit()
+	{
+		realloc(currSize);
+	}
+
+	void reserve(size_t amount)
+	{
+		realloc(currCapacity + amount);
+	}
+
+	constexpr bool empty() const noexcept
+	{
+		return currSize == 0;
+	}
+
+	constexpr T& at(size_t index) const noexcept
+	{
+		if (index < currSize)
+			return buffer[index];
+	}
+
+	constexpr size_t capacity() const noexcept
+	{
+		return currCapacity;
+	}
+
+	constexpr T& first() const noexcept
+	{
+		return *buffer;
+	}
+
+	constexpr T& last() const noexcept
+	{
+		return *(buffer+currSize-1);
+	}
+
+	constexpr T* begin() const noexcept
 	{
 		return buffer;
 	}
 
-	T* end() const noexcept
+	constexpr T* end() const noexcept
 	{
 		return (buffer + currSize);
 	}
@@ -79,7 +115,7 @@ public:
 		return currSize;
 	}
 
-	T& operator[](const size_t index)
+	constexpr T& operator[](const size_t index)
 	{
 		return buffer[index];
 	}
@@ -88,6 +124,9 @@ public:
 int main()
 {
 	dynamicArray<int> dArray(5);
+
+	std::cout << dArray.empty() << '\n';
+
 	dArray.push_back(1);
 	dArray.push_back(2);
 	dArray.push_back(4);
