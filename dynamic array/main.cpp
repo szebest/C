@@ -12,7 +12,7 @@ private:
 	{
 		T* temporary = new T[_newCapacity];
 		
-		memcpy(temporary, buffer, currSize * sizeof(int));
+		memcpy(temporary, buffer, currSize * sizeof(T));
 
 		delete[] buffer;
 		buffer = temporary;
@@ -41,6 +41,13 @@ public:
 		currSize++;
 	}
 
+	void erase(T* _pointer)
+	{
+		memcpy(_pointer, _pointer + 1, currSize - (_pointer - buffer) / sizeof(T) + 1);
+
+		currSize--;
+	}
+
 	T* begin() const noexcept
 	{
 		return buffer;
@@ -66,10 +73,12 @@ int main()
 {
 	dynamicArray<int> dArray;
 	dArray.push_back(1);
+	dArray.push_back(2);
 	dArray.push_back(1);
 	dArray.push_back(1);
-	dArray.push_back(1);
-	dArray.push_back(1);
+	dArray.push_back(5);
+
+	dArray.erase(dArray.begin()+4);
 
 	for (size_t i = 0; i < dArray.size(); i++)
 		std::cout << dArray[i] << '\n';
