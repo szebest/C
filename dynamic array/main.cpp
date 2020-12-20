@@ -43,7 +43,8 @@ public:
 
 	void erase(T* _pointer)
 	{
-		memmove(_pointer, _pointer + 1, currSize - (_pointer - buffer) / sizeof(T) + 1);
+		if (_pointer + 1 < end())
+			memmove(_pointer, _pointer + 1, currSize - (_pointer - buffer) / sizeof(T) + 1);
 
 		currSize--;
 	}
@@ -76,7 +77,7 @@ public:
 
 int main()
 {
-	dynamicArray<int> dArray;
+	dynamicArray<int> dArray(5);
 	dArray.push_back(1);
 	dArray.push_back(2);
 	dArray.push_back(4);
