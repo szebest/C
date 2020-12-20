@@ -41,6 +41,16 @@ public:
 		currSize++;
 	}
 
+	T* begin() const noexcept
+	{
+		return buffer;
+	}
+
+	T* end() const noexcept
+	{
+		return (buffer + currSize);
+	}
+
 	constexpr size_t size() const noexcept
 	{
 		return currSize;
@@ -63,6 +73,13 @@ int main()
 
 	for (size_t i = 0; i < dArray.size(); i++)
 		std::cout << dArray[i] << '\n';
+
+	std::cout << "Range-based loop\n";
+
+	for (int elem : dArray)
+	{
+		std::cout << elem << '\n';
+	}
 
 	return 0;
 }
