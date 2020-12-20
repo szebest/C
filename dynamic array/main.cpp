@@ -10,7 +10,7 @@ private:
 
 	void realloc(size_t _newCapacity)
 	{
-		if (_newCapacity == 1)
+		if (_newCapacity == 0)
 			return;
 
 		T* temporary = new T[_newCapacity];
